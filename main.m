@@ -87,8 +87,21 @@ iter = iter +1;
 
 end
 %----------------- Step 3 computing xi ---------------------------
-% since this is linear relationship, then we can do regression directly
-X = [x_j, -price_j];
+% Here we use BLP instrument that Zj = sum xi, where i~=j ( May have the
+% Over ID problem)
+
+% Here we use the price of other goods as the instrument( Hausmann Instrument) 
+for j = 1: G
+    z(j,:) = sum(price_j,1) - price_j(j,:);
+end
+z = [ones(G,1),z];
+% then the moment condition for the estimation is E[xi*z] = 0
+% since this is linear model, we do this by 2sls
+[par_z,~,~,Cov_z] = mvregress(z,price_j); % 1st stage regression
+
+p_j_hat = z * par_z; % predict the p_j_hat
+
+X = [x_j, -p_j_hat];
 
 [par,~,E,CovB] = mvregress(X, delta1_j); 
 % - par is paramter of beta and alpha
