@@ -11,7 +11,7 @@ clc
 %% Data Use and Generation 
 load BLP_1999.mat
 
-global x z price W
+global x z price W delta
 
 
 N = size(car_id,1); % number of obs.
@@ -43,7 +43,7 @@ iter = 1;
 
 while diff>Tol && iter < MaxIter
 %-------------- step 1 find Mkt Share --------------
-s_j = findMktShare(delta,sigma);
+s_j = findMktShare(delta,sigma,x);
 
 % construct contract mapping
 delta1 = delta + log(share)- log(s_j);
