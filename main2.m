@@ -7,11 +7,11 @@
 % This main script is doing the IV Logit Regression for replicating the BLP 1995
 clear
 clc
+global x z price W delta share
 
 %% Data Use and Generation 
 load BLP_1999.mat
 
-global x z price W delta
 
 
 N = size(car_id,1); % number of obs.
@@ -90,7 +90,13 @@ W = eye(size(theta,1));
 
 %% --------- step 4 search for the optimal theta ------------------
 % Initialized guess of sigma
+
 s = linspace(0.1,10,10)';
+
+
+[theta_hat_l,fval_l] = arrayfun(@SearchTheta,s,s,s,s,s,s,"UniformOutput", false);
+
+return
 
 sigma = cartesian(s,s,s,s,s,s); 
 SN = size(sigma,1);
