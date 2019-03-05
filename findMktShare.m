@@ -1,9 +1,9 @@
-function [s_j] = findMktShare(delta)
+function [s_j] = findMktShare(delta,sigma,x)
 % This function provide a method that given and vik, we compute a market
 % share
-global x sigma N
 % set sample times
 I = 1000; % set sample time
+N = size(x,1);
 % generate preference shock vik ~ N(0,1) for each perference
 v = normrnd(0,1,size(x,2),I);
 s_ij = zeros(N,I);
