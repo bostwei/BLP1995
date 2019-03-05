@@ -4,7 +4,7 @@
 % 03/03/2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% This main script is prepared for replicating the BLP 1995
+% This main script is doing the IV Logit Regression for replicating the BLP 1995
 clear
 clc
 
@@ -16,7 +16,7 @@ global x_j price_j xi_j
 
 N = size(car_id,1); % number of obs.
 cons = ones(N,1); % constant
-x = [cons, hpwt, air, mpd, mpg, space,trend]; % grouping the x variable
+x = [cons, hpwt, air, mpd, space,trend]; % grouping the x variable
 
 [model_group,ID] = findgroups(model_id); % initiate assign group number to each group
 G = size(ID,1);% number of groups
@@ -45,8 +45,8 @@ mpg_j = splitapply(@mean,mpg,model_group);
 space_j = splitapply(@mean,space,model_group);
 trend_j = splitapply(@mean,trend,model_group);
 
-x_j = [cons_j, hpwt_j, air_j, mpd_j, mpg_j, space_j,trend_j];
-
+% x_j = [cons_j, hpwt_j, air_j, mpd_j, mpg_j, space_j,trend_j];
+x_j = [cons_j, hpwt_j, air_j, mpd_j, space_j,trend_j];
 % calculate the price of group by mean
 price_j = splitapply(@mean,price,model_group);
 %------------------- Step 1 --------------------------------------------
