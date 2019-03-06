@@ -1,8 +1,7 @@
-function [theta_hat_i,fval_i] = SearchTheta(s1,s2,s3,s4,s5,s6)
-global x share
+function [theta1,theta2,theta3,theta4,theta5,theta6,theta7,fval_i] = SearchTheta(s1,s2,s3,s4,s5,s6)
+global x share W
 
 sigma = [s1,s2,s3,s4,s5,s6]; 
-
 
 N  = size(x,1);
     
@@ -46,7 +45,13 @@ N  = size(x,1);
     W = eye(size(theta,1));
     % using the 1 step GMM estimator
     [theta_hat_i,fval_i]=fminsearch(@gmm,theta);
-
+    theta1 = theta_hat_i(1);
+    theta2 = theta_hat_i(2);
+    theta3 = theta_hat_i(3);
+    theta4 = theta_hat_i(4);
+    theta5 = theta_hat_i(5);
+    theta6 = theta_hat_i(6);
+    theta7 = theta_hat_i(7);
     
 end
 

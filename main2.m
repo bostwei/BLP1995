@@ -8,6 +8,7 @@
 clear
 clc
 global x z price W delta share
+GPU = 1; % indicator of whether use GPU or not
 
 %% Data Use and Generation 
 load BLP_1999.mat
@@ -91,11 +92,16 @@ W = eye(size(theta,1));
 %% --------- step 4 search for the optimal theta ------------------
 % Initialized guess of sigma
 
-s = linspace(0.1,10,10)';
+% if GPU == 1
+%     s = gpuArray(linspace(0.1,10,10)');
+% else
+    s = linspace(0.1,10,10)';
+% end
 
+[theta1,theta2,theta3,theta4,theta5,theta6,theta7,fval_i]...
+    = arrayfun(@SearchTheta,s,s,s,s,s,s);
 
-[theta_hat_l,fval_l] = arrayfun(@SearchTheta,s,s,s,s,s,s,"UniformOutput", false);
-
+save('result.mat');
 return
 
 sigma = cartesian(s,s,s,s,s,s); 
