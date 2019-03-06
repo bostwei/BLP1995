@@ -7,12 +7,11 @@
 % This main script is doing the IV Logit Regression for replicating the BLP 1995
 clear
 clc
-global x z price W delta share
-GPU = 1; % indicator of whether use GPU or not
-
+warning('off')
 %% Data Use and Generation 
 load BLP_1999.mat
 
+global x z price 
 
 
 N = size(car_id,1); % number of obs.
@@ -91,20 +90,11 @@ W = eye(size(theta,1));
 
 %% --------- step 4 search for the optimal theta ------------------
 % Initialized guess of sigma
-
-% if GPU == 1
-%     s = gpuArray(linspace(0.1,10,10)');
-% else
-    s = linspace(0.1,10,10)';
-% end
-
-[theta1,theta2,theta3,theta4,theta5,theta6,theta7,fval_i]...
-    = arrayfun(@SearchTheta,s,s,s,s,s,s);
-
-save('result.mat');
-return
+s = linspace(0.1,10,10)';
 
 sigma = cartesian(s,s,s,s,s,s); 
+s = distributed(sigma);
+
 SN = size(sigma,1);
 
 
@@ -146,8 +136,7 @@ for i = 1:SN
     theta = [beta;alpha];
 
     %-------- using 2step GMM estimator ---------------
-    % The weighted matrix 
-    W = eye(size(theta,1));
+
     % using the 1 step GMM estimator
     [theta_hat_i,fval_i]=fminsearch(@gmm,theta);
     theta_hat(:,i) = theta_hat_i;
