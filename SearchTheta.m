@@ -1,14 +1,15 @@
-function [theta_hat_i,fval_i] = SearchTheta(s1,s2,s3,s4,s5,s6)
-global x share W
+function [theta_hat_i,fval_i] = SearchTheta(sigma,x,share)
 
-sigma = [s1,s2,s3,s4,s5,s6]; 
+global delta
+% sigma = [s1,s2,s3,s4,s5,s6]; 
 
 N  = size(x,1);
     
     sigma_i = sigma';
-
+%     sigma_i = ones(6,1);
+    
     % initial guess of delta
-    delta = 40 * ones(N,1);
+    delta = 2 * ones(N,1);
     % find delta(sigma)
     % initialized loop parameter
     Tol = 0.1;
@@ -26,7 +27,7 @@ N  = size(x,1);
     % calculate the difference
     diff = max(abs(delta1 - delta)./abs(delta));
 
-%     fprintf('This is %d itertion. The difference is %.3f \n', iter, diff);
+    % fprintf('This is %d itertion. The difference is %.3f \n', iter, diff);
     % update guess of delat
     delta = delta1;
 
@@ -42,16 +43,9 @@ N  = size(x,1);
 
     %-------- using 2step GMM estimator ---------------
     % The weighted matrix 
-    W = eye(size(theta,1));
+    
     % using the 1 step GMM estimator
     [theta_hat_i,fval_i]=fminsearch(@gmm,theta);
-%     theta1 = theta_hat_i(1);
-%     theta2 = theta_hat_i(2);
-%     theta3 = theta_hat_i(3);
-%     theta4 = theta_hat_i(4);
-%     theta5 = theta_hat_i(5);
-%     theta6 = theta_hat_i(6);
-%     theta7 = theta_hat_i(7);
     
 end
 

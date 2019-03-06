@@ -16,7 +16,7 @@ Omega = (z' * xi) * ( z' * xi)' ;
 % generate the size of the sample 
 n = size(m,1);
 W = inv(Omega);
-
+% W = eye(size(theta,1));
 % the GMM criterion function 
 Q = n * m' * W * m;
 

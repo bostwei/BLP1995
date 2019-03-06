@@ -11,25 +11,21 @@ warning('off')
 %% Data Use and Generation 
 load BLP_1999.mat
 
-global x z price 
+global x z price delta
 
 
 N = size(car_id,1); % number of obs.
 cons = ones(N,1); % constant
 x = [cons, hpwt, air, mpd, space,trend]; % grouping the x variable
 
-[model_group,ID] = findgroups(model_id); % initiate assign group number to each group
-G = size(ID,1);% number of groups
+[Mkt,Mkt_ID] = findgroups(year1); % initiate assign group number to each group
+G = size(Mkt_ID,1);% number of groups
 
 %% Step 1: Given delta, compute the mkt share 
-% generate EVT1 for each group, eij
-e = evrnd(0,1,N,1);
-
-
+% calculate the share of each group
 
 % Initialized guess of sigma
 sigma = ones(size(x,2),1);
-
 
 
 % initial guess of delta
@@ -93,7 +89,7 @@ W = eye(size(theta,1));
 s = linspace(0.1,10,10)';
 
 sigma = cartesian(s,s,s,s,s,s); 
-s = distributed(sigma);
+% s = distributed(sigma);
 
 SN = size(sigma,1);
 
@@ -144,3 +140,5 @@ for i = 1:SN
     
     fprintf('This is %d itertion. \n', i);
 end
+save('result.mat');
+return

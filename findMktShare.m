@@ -11,8 +11,11 @@ for i = 1:I
    v_i = v(:,i);  
 % calculate the utility over different goods and charateristics
 enu = exp(delta + sum((x .* (ones(N,1) * v_i') .* (ones(N,1) * sigma')),2) );  % numerator
+
 den = 1+ sum(exp(delta + sum((x .* (ones(N,1) * v_i') .* (ones(N,1) * sigma')),2) ),1); % denorminator
+
 s_ij(:,i) = enu./den;
+
 end
 
 s_j = sum(s_ij,2)/I;
