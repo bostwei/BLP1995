@@ -10,8 +10,9 @@ clc
 warning('off')
 %%% Data Use and Generation 
 load BLP_1999.mat
+load income.mat
 
-global x z price share G N Mkt price lambda
+global x z price share G N Mkt price lambda g_y
 
 
 
@@ -29,6 +30,7 @@ G = size(Mkt_ID,1);% number of groups
 
 g_price = splitapply(@mean,price,Mkt); % the mean price in a mkt
 gg_price = zeros(N,1); % average group price
+g_y = zeros(N,1);
 
 for g=1:G
     gg_price(Mkt==g) = g_price(g);
@@ -40,6 +42,9 @@ for g=1:G
     gg_num(Mkt==g) = size(Mkt(Mkt==g),1);
 end
 
+for g=1:G
+    g_y(Mkt==g) = y(g);
+end
 
 price_til = (sum(price,1) - gg_price .* gg_num)./(N- gg_num); % mean price in other mkt 
 
@@ -54,8 +59,8 @@ sigma = ones(size(x,2),1);
 delta = ones(G,1); % given initial guess of delta for each group
 
 % initial guess of beta
-beta = ones(size(x,2),1);
-alpha = 1;
+beta = [-7.304; 2.185;0.579;-0.049;2.064;0.026];
+alpha = 43;
 
 lambda =2;
 % Initialized paramter
@@ -72,15 +77,16 @@ sigma_lb = 0 * ones(size(x,2),1);
 ub = [alpha_ub;beta_ub;delta_ub;sigma_ub ];
 lb = [alpha_lb;beta_lb;delta_lb;sigma_lb ];
 func = @MPECgmm;
-
+Q= MPECgmm(theta);
 opts = optimoptions('fmincon','UseParallel',true );
 
 % [theta_hat,Qval]=particleswarm(func,1);%,[],[],[],[],lb,ub);%,[],opts);
 
-lambda_loop =linspace(2,10,10);
-for l = 1:size(lambda_loop)  
+lambda_loop =linspace(0.1,10,1000);
+for l = 1:size(lambda_loop,2)  
 lambda = lambda_loop(l);
 tic
 [theta_hat(:,l),Qval(:,l)]=fmincon(func,theta,[],[],[],[],lb,ub);%,[],opts);
 toc
 end
+save result.mat
