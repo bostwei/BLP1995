@@ -11,7 +11,7 @@ warning('off')
 %%% Data Use and Generation 
 load BLP_1999.mat
 
-global x z price share G N Mkt price
+global x z price share G N Mkt price lambda
 
 
 
@@ -51,17 +51,29 @@ z = [x,price_til];
 sigma = ones(size(x,2),1);
 
 % initial guess of delta
-delta = Mkt_ID; % given initial guess of delta for each group
+delta = ones(G,1); % given initial guess of delta for each group
 
 % initial guess of beta
 beta = ones(size(x,2),1);
 alpha = 1;
 
-lambda =1;
+lambda =2;
 
-[Q] = MPECgmm(alpha,beta,delta, sigma,lambda);
+theta = [alpha;beta;delta;sigma];
+alpha_ub = 60;
+alpha_lb = -60;
+beta_ub = [-5;9;4;2;6;1];
+beta_lb = [-9;-9;-4;-2;-6;-1];
+delta_ub = 80*ones(G,1);
+delta_lb = zeros(G,1);
+sigma_ub = 5 * ones(size(x,2),1);
+sigma_lb = 0 * ones(size(x,2),1);
+ub = [alpha_ub;beta_ub;delta_ub;sigma_ub ];
+lb = [alpha_lb;beta_lb;delta_lb;sigma_lb ];
+func = @MPECgmm;
 
-
-
-
-
+opts = optimoptions('fmincon','UseParallel',true );
+tic
+lambda =linspace(2;
+[theta,Qval]=fmincon(func,theta,[],[],[],[],lb,ub);%,[],opts);
+toc

@@ -1,7 +1,13 @@
-function [ob] = MPECgmm(alpha,beta,delta, sigma, lambda)
+function [ob] = MPECgmm(theta)
 % This function calculate the crterion function given alpha beta, delta,
 % and sigma
-global x share G N Mkt price z
+global x share G N Mkt price z lambda
+
+alpha = theta(1);
+beta  = theta(2:size(x,2)+ 2 - 1,:);
+delta = theta(size(x,2) + 2 : size(x,2) + 2 + G - 1,:);
+sigma = theta(size(x,2) + 2 + G: size(x,2) + 2 + G + size(x,2) - 1,:);
+
 
 % given alpha beta delta sigma
 % the moment condition is 
