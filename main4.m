@@ -58,8 +58,9 @@ beta = ones(size(x,2),1);
 alpha = 1;
 
 lambda =2;
-
+% Initialized paramter
 theta = [alpha;beta;delta;sigma];
+% Initialized guess
 alpha_ub = 60;
 alpha_lb = -60;
 beta_ub = [-5;9;4;2;6;1];
@@ -74,12 +75,12 @@ func = @MPECgmm;
 
 opts = optimoptions('fmincon','UseParallel',true );
 
-lambda_loop =linspace(1,2,20);
-for l = 1:size(lambda_loop)
-tic    
-lambda = lambda_loop(l);
+% [theta_hat,Qval]=particleswarm(func,1);%,[],[],[],[],lb,ub);%,[],opts);
 
-[theta(l),Qval(l)]=fmincon(func,theta,[],[],[],[],lb,ub);%,[],opts);
-fprintf('This is %d iteration',l);
+lambda_loop =linspace(2,10,10);
+for l = 1:size(lambda_loop)  
+lambda = lambda_loop(l);
+tic
+[theta_hat(:,l),Qval(:,l)]=fmincon(func,theta,[],[],[],[],lb,ub);%,[],opts);
 toc
 end
