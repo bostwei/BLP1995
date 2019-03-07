@@ -73,7 +73,13 @@ lb = [alpha_lb;beta_lb;delta_lb;sigma_lb ];
 func = @MPECgmm;
 
 opts = optimoptions('fmincon','UseParallel',true );
-tic
-lambda =linspace(2;
-[theta,Qval]=fmincon(func,theta,[],[],[],[],lb,ub);%,[],opts);
+
+lambda_loop =linspace(1,2,20);
+for l = 1:size(lambda_loop)
+tic    
+lambda = lambda_loop(l);
+
+[theta(l),Qval(l)]=fmincon(func,theta,[],[],[],[],lb,ub);%,[],opts);
+fprintf('This is %d iteration',l);
 toc
+end
